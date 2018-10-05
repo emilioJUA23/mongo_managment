@@ -8,7 +8,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //declaracion de los servicios API
-app.get("/survey/answer", (req, res, next) => {
+app.get("/survey/answer", (req, res) => {
   GetSurveys().then(function(results) {
     res.writeHead(200, {"Content-Type": "application/json"});
     res.write(JSON.stringify(results));
@@ -48,11 +48,11 @@ function GetSurveys()
 {
   return new Promise(function(resolve,reject){
     MongoClient.connect(url, function(err, db) {
-        if (err) throw reject('Fallo la conexion a la base de datos');
+        if (err) return reject('Fallo la conexion a la base de datos');
         console.log("connected to Database");
         var dbo = db.db("surveys");
-        dbo.collection("surveys").findOne({}, function(err, result) {
-          if (err) reject('Fallo el query a la base de datos');
+        dbo.collection("answers").find({}).toArray( function(err, result) {
+          if (err) return reject('Fallo el query a la base de datos');
           resolve(result);
           console.log("query executed");
           db.close();
