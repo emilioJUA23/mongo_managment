@@ -9,7 +9,11 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //declaracion de los servicios API
 app.get("/survey/answer", (req, res, next) => {
-    res.json(["Tony","Lisa","Michael","Ginger","Food"]);
+  GetSurveys().then(function(results) {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.write(JSON.stringify(results));
+    res.end();
+    })
    });
 
 app.post('/survey/answer', function(req, res) {
@@ -22,7 +26,6 @@ app.post('/survey/answer', function(req, res) {
 function createServer(){
     app.listen(3000, () => {
     console.log("Server running on port 3000");
-    // createConn();
     });
 }
 
@@ -38,8 +41,26 @@ function insertSurvey(myobj)
           console.log("1 document inserted");
           db.close();
         });
-      }); 
+      });
 }
 
-//ejecuccion 
+function GetSurveys()
+{
+  return new Promise(function(resolve,reject){
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw reject('Fallo la conexion a la base de datos');
+        console.log("connected to Database");
+        var dbo = db.db("surveys");
+        dbo.collection("surveys").findOne({}, function(err, result) {
+          if (err) reject('Fallo el query a la base de datos');
+          resolve(result);
+          console.log("query executed");
+          db.close();
+          console.log("conection Closed");
+          })
+        })
+  })
+}
+
+//ejecuccion
 createServer();
