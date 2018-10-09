@@ -2,10 +2,25 @@
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var express = require("express");
+// var cors = require('cors')
 var app = express();
 var bodyParser = require('body-parser');
+// app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.get('Origin') || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Expose-Headers', 'Content-Length');
+  res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
+  if (req.method === 'OPTIONS') {
+    console.log(req);
+    return res.send(200);
+  } else {
+    return next();
+  }
+});
 
 //declaracion de los servicios API
 app.get("/survey/answer", (req, res) => {
@@ -18,6 +33,7 @@ app.get("/survey/answer", (req, res) => {
 
 app.post('/survey/answer', function(req, res) {
     var survey_answer = req.body.survey_answer;
+    console.log(survey_answer);
     insertSurvey(survey_answer)
     res.send(JSON.stringify(survey_answer));
 });
