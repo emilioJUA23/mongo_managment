@@ -15,7 +15,7 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Expose-Headers', 'Content-Length');
   res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
   if (req.method === 'OPTIONS') {
-    console.log(req);
+    // console.log(req);
     return res.send(200);
   } else {
     return next();
@@ -32,7 +32,8 @@ app.get("/survey/answer", (req, res) => {
    });
 
 app.post('/survey/answer', function(req, res) {
-    var survey_answer = req.body.survey_answer;
+    console.log(JSON.stringify(req.body));
+    var survey_answer = req.body;
     console.log(survey_answer);
     insertSurvey(survey_answer)
     res.send(JSON.stringify(survey_answer));
