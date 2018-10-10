@@ -39,6 +39,20 @@ app.post('/survey/answer', function(req, res) {
     res.send(JSON.stringify(survey_answer));
 });
 
+app.get("/survey/instrument", (req, res) => {
+  GetInstruments().then(function(results) {
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.write(JSON.stringify(results));
+    res.end();
+    })
+});
+
+app.post('/survey/instrument', function(req, res) {
+    var survey_answer = req.body;
+    insertInstrument(survey_answer)
+    res.send(JSON.stringify(survey_answer));
+});
+
 //levantamos el servidor
 function createServer(){
     app.listen(3000, () => {
@@ -61,6 +75,20 @@ function insertSurvey(myobj)
       });
 }
 
+function insertInstrument(myobj)
+{
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        console.log("connected to Database");
+        var dbo = db.db("surveys");
+        dbo.collection("surveys").insertOne(myobj, function(err, res) {
+          if (err) throw err;
+          console.log("1 document inserted");
+          db.close();
+        });
+      });
+}
+
 function GetSurveys()
 {
   return new Promise(function(resolve,reject){
@@ -69,6 +97,24 @@ function GetSurveys()
         console.log("connected to Database");
         var dbo = db.db("surveys");
         dbo.collection("answers").find({}).toArray( function(err, result) {
+          if (err) return reject('Fallo el query a la base de datos');
+          resolve(result);
+          console.log("query executed");
+          db.close();
+          console.log("conection Closed");
+          })
+        })
+  })
+}
+
+function GetInstruments()
+{
+  return new Promise(function(resolve,reject){
+    MongoClient.connect(url, function(err, db) {
+        if (err) return reject('Fallo la conexion a la base de datos');
+        console.log("connected to Database");
+        var dbo = db.db("surveys");
+        dbo.collection("surveys").find({}).toArray( function(err, result) {
           if (err) return reject('Fallo el query a la base de datos');
           resolve(result);
           console.log("query executed");
