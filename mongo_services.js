@@ -79,12 +79,17 @@ function insertInstrument(myobj)
 {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        console.log("connected to Database");
         var dbo = db.db("surveys");
-        dbo.collection("surveys").insertOne(myobj, function(err, res) {
+        console.log("connected to Database");
+        var myquery = { "title": myobj.title };
+        dbo.collection("surveys").deleteMany(myquery, function(err, obj) {
           if (err) throw err;
-          console.log("1 document inserted");
-          db.close();
+          console.log(`${obj.result.n} document(s) deleted`);
+          dbo.collection("surveys").insertOne(myobj, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            db.close();
+          });
         });
       });
 }
