@@ -51,6 +51,14 @@ app.post('/survey/instrument', function(req, res) {
     res.send(JSON.stringify(survey_answer));
 });
 
+app.get("/survey/results", (req, res) => {
+  res.download(__dirname + '\\n_texto.txt', function(err){
+        if (err) {
+          throw err;
+        }
+  });
+});
+
 //levantamos el servidor
 function createServer(){
     app.listen(3000, () => {
