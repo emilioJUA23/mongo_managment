@@ -32,9 +32,7 @@ app.get("/survey/answer", (req, res) => {
    });
 
 app.post('/survey/answer', function(req, res) {
-    console.log(JSON.stringify(req.body));
     var survey_answer = req.body;
-    console.log(survey_answer);
     insertSurvey(survey_answer)
     res.send(JSON.stringify(survey_answer));
 });
