@@ -51,12 +51,29 @@ app.post('/survey/instrument', function(req, res) {
     res.send(JSON.stringify(survey_answer));
 });
 
-app.get("/survey/results", (req, res) => {
-  res.download(__dirname + '\\n_texto.txt', function(err){
-        if (err) {
-          throw err;
-        }
-  });
+app.get("/survey/results/:id", (req, res) => {
+  var id = req.params.id;
+  GetResults(id).then(function(results)
+  {
+    console.log(results);
+    var jsonexport = require('jsonexport');
+    jsonexport(results,function(err, csv)
+    {
+      if(err) return console.log(err);
+      fs = require('fs');
+      console.log(csv);
+      fs.writeFile('out.csv', csv, function (err) {
+          if (err) 
+              return console.log(err);
+          res.download(__dirname + '\\out.csv', function(err){
+            if (err) {
+              throw err;
+            }
+      });
+    });
+});
+
+  })
 });
 
 //levantamos el servidor
@@ -128,6 +145,25 @@ function GetInstruments()
         dbo.collection("surveys").find({}).toArray( function(err, result) {
           if (err) return reject('Fallo el query a la base de datos');
           resolve(result);
+          console.log("query executed");
+          db.close();
+          console.log("conection Closed");
+          })
+        })
+  })
+}
+
+function GetResults(ins_id)
+{
+  return new Promise(function(resolve,reject){
+    MongoClient.connect(url, function(err, db) {
+        if (err) return reject('Fallo la conexion a la base de datos');
+        console.log("connected to Database");
+        var dbo = db.db("surveys");
+        dbo.collection("answers").find({instrument_id:ins_id}).toArray( function(err, result) {
+          if (err) return reject('Fallo el query a la base de datos');
+          var extract = result.map(a => a.result);
+          resolve(extract);
           console.log("query executed");
           db.close();
           console.log("conection Closed");
