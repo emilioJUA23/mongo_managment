@@ -2,17 +2,24 @@
   "name": "mongo_conection",
   "version": "1.0.0",
   "description": "",
-  "main": "mongo_services.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "jsonexport": "^2.3.0",
-    "mongodb": "^3.1.6"
+    "jsonwebtoken": "^8.3.0",
+    "mongodb": "^3.1.6",
+    "mongoose": "^5.3.4",
+    "mongoose-unique-validator": "^2.0.2",
+    "underscore": "^1.9.1",
+    "yargs": "^12.0.2"
   }
 }
