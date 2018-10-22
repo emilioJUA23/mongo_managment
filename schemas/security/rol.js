@@ -22,7 +22,8 @@ let rolSchema = new Schema({
         required: false
     },
     fechaDeActualizacion: {
-        type: Date
+        type: Date,
+        required: false
     },
     usuarioDeActualizacion: {
         type: Schema.Types.ObjectId,

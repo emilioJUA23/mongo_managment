@@ -13,12 +13,14 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.3",
     "jsonexport": "^2.3.0",
     "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.6",
     "mongoose": "^5.3.4",
     "mongoose-unique-validator": "^2.0.2",
+    "nodemailer": "^4.6.8",
     "underscore": "^1.9.1",
     "yargs": "^12.0.2"
   }

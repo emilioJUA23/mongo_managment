@@ -7,9 +7,7 @@ app.post('/api/v1/security/vista', function (req, res) {
     let body = req.body;
     let vista = new Vista({
         nombre: body.nombre,
-        descripcion: body.descripcion,
-        fechaDeIngreso: body.fechaDeIngreso,
-        usuarioDeIngreso: body.usuarioDeIngreso,
+        descripcion: body.descripcion
     });
 
     vista.save((err, vistaDB) => {

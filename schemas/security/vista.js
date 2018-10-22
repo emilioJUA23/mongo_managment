@@ -12,26 +12,9 @@ let vistaSchema = new Schema({
         type: String,
         required: [true, 'La descripción es necesario']
     },
-    fechaDeIngreso: {
-        type: Date,
+    path: {
+        type: String,
         required: [true, 'La descripción es necesario']
-    },
-    usuarioDeIngreso: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required: false
-    },
-    fechaDeActualizacion: {
-        type: Date
-    },
-    usuarioDeActualizacion: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required: false
-    },
-    estado: {
-        type: Boolean,
-        default: true
     }
 });
 

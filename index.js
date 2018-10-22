@@ -20,6 +20,8 @@ app.use(function(req, res, next) {
 
 app.use(require('./routes'));
 
+mongoose.Promise = global.Promise;
+
 mongoose.connect(process.env.URLDB , (err,res) => {
     if (err) throw err;
     console.log("Base de datos online");
