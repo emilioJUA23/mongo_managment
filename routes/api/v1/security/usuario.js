@@ -80,31 +80,40 @@ app.post('/api/v1/security/usuario/all', [verificarToken], function (req, res) {
 app.put('/api/v1/security/usuario/:id', [verificarToken], function (req, res) {
     let id = req.params.id;
     let body = req.body;
+
     Usuario.update(
         { "_id": id},
-        { $push: { roles: { $each: body } } },
-        function (err, raw) {
+        { $push: { roles: { $each: body.push } } },
+        function (err, raw) 
+        {
             if (err) {
                 return res.status(400).json({
                     ok: false,
                     err
                 });
             }
-            if (raw === null){
-                return res.status(400).json({
-                    ok: false,
-                    err:  {message:"Usuario no encontrado"}
-                });
-            }
-            res.json({
-                ok:true,
-                raw
-            });
+            Usuario.update(
+                { "_id": id},
+                { $pullAll: { roles: { $each:  body.pull } } },     
+                function (err, raw) 
+                {
+                    if (err) {
+                        return res.status(400).json({
+                            ok: false,
+                            err
+                        });
+                    }
+                    res.json({
+                        ok: true,
+                        message: "Roles actualizado"
+                    });
+                }
+            );
         }
-     );
+    );
 });
 
-app.delete('/api/v1/security/usuario/forgetpassword', [verificarToken], (req, res) => {
+app.delete('/api/v1/security/usuario/:id', [verificarToken], (req, res) => {
     let id =  req.params.id;
     let body = {estado:false};
     Usuario.findByIdAndUpdate(id, body,{new: true}, (err, usuario) =>{
@@ -127,7 +136,7 @@ app.delete('/api/v1/security/usuario/forgetpassword', [verificarToken], (req, re
     });
 });
 
-app.delete('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
+app.post('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
     let id =  req.params.id;
     let body = req.body;
     body.password = bcrypt.hashSync(body.password,10);

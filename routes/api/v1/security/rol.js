@@ -75,22 +75,37 @@ app.post('/api/v1/security/rol/all', [verificarToken], function (req, res) {
 app.put('/api/v1/security/rol/:id', [verificarToken], function (req, res) {
     let id = req.params.id;
     let body = req.body;
+
     Rol.update(
         { "_id": id},
-        { $push: { vistas: { $each: body } } },
-        function (err, raw) {
+        { $push: { roles: { $each: body.push } } },
+        function (err, raw) 
+        {
             if (err) {
                 return res.status(400).json({
                     ok: false,
                     err
                 });
             }
-            res.json({
-                ok:true,
-                raw
-            });
+            Rol.update(
+                { "_id": id},
+                { $pullAll: { roles: { $each:  body.pull } } },     
+                function (err, raw) 
+                {
+                    if (err) {
+                        return res.status(400).json({
+                            ok: false,
+                            err
+                        });
+                    }
+                    res.json({
+                        ok: true,
+                        message: "Vistas actualizado"
+                    });
+                }
+            );
         }
-     );
+    );
 });
 
 app.delete('/api/v1/security/rol/:id', [verificarToken], (req, res) => {
