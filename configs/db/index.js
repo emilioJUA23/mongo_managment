@@ -8,61 +8,73 @@ const Utils = require('../../utils');
 const configurarVistas = async() =>{
     try {
         let home = {
+            ID: "HOME",
             nombre: "Principal",
             descripcion: "Pantalla principal donde se encuentra el menu de opciones",
             path: "home"
         };
         let welcome = {
+            ID: "WELCOME",
             nombre: "Bienvenida",
             descripcion: "Pantalla de bienvenida",
             path: "welcome"
         };
         let surveyIndex = {
+            ID: "SURVEY-INDEX",
             nombre: "Indice de Encuestas",
             descripcion: "Muestra todas las encuestas realizada en el sistema",
             path: "surveyindex"
         };
         let surveyBuild = {
+            ID: "SURVEY-BUILD",
             nombre: "Gestion de encuestas",
             descripcion: "Pantalla que da seguimiento a una encuesta",
             path: "surveybuild/?{id}"
         };
         let surveyVersions = {
+            ID: "SURVEY-VERSIONS",
             nombre: "Versionamiento de encuestas",
             descripcion: "Pantalla que muestras las versiones de una encuesta",
             path: "surveyversions/{id}"
         };
         let configuration = {
+            ID: "CONFIGURATION",
             nombre: "configuracion del sistema",
             descripcion: "Muestra todaas las opciones de configuracion del sistema",
             path: "configuration"
         };
         let userIndex ={
+            ID: "USER-INDEX",
             nombre: "Listado de usuarios",
             descripcion: "Listado de usuarios del sistema",
             path: "userindex"
         };
         let userSignUp = {
+            ID: "USER-SIGN-UP",
             nombre: "Creacion de usuarios",
             descripcion: "Pantalla para crear un usuario",
             path: "userindex"
         };
         let userUpdate = {
+            ID: "USER-UPDATE",
             nombre: "Actualizacion de usuarios",
             descripcion: "Pantalla para actualizar roles del usuario o eliminar usuario",
             path: "userupdate/{id}"
         };
         let rolIndex = {
+            ID: "ROL-INDEX",
             nombre: "Listado de roles",
             descripcion: "Listado del roles del sistema",
             path: "rolindex"
         };
         let rolUpdate = {
+            ID: "ROL-UPDATE",
             nombre: "Actualizar un rol",
             descripcion: "Actualizar o borrar un rol, asi mismo de asignar las pantallas correspondiente",
             path: "rolupdate/{id}"
         };
         let vistaIndex = {
+            ID: "VISTA-INDEX",
             nombre: "Indice de vistas del sistema",
             descripcion: "Mostrar los indices correspondiente dl sistema",
             path: "vistaindex"
@@ -208,7 +220,7 @@ const configurarVistas = async() =>{
             primerApellido: "Administrador",
             email: process.env.SMTP_AUTH_USER,
             password: Utils.hash("123456"),
-            rol: PRRol._id
+            roles: [PRRol._id]
         });
         
         console.log("Creando Usuario");

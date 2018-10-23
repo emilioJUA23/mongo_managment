@@ -4,6 +4,11 @@ const uniqueValidator = require('mongoose-unique-validator');
 let Schema = moongose.Schema;
 
 let vistaSchema = new Schema({
+    ID:{
+        type: String,
+        unique: true,
+        required: [true, 'El ID es necesario']
+    },
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario']

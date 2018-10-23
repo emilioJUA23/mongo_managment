@@ -31,11 +31,11 @@ let usuarioSchema = new Schema({
         type: Boolean,
         default: true
     },
-    rol: {
+    roles:[{
         type: Schema.Types.ObjectId,
         ref: 'Rol',
         required: false
-    },
+    }]
 });
 
 usuarioSchema.methods.toJSON = function() 
