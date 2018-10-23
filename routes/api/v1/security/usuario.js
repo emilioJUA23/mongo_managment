@@ -7,6 +7,9 @@ const {verificarToken} = require('../../../../middleware/authentication');
 var generator = require('generate-password');
 const Utils = require('../../../../utils');
 
+/** 
+ *  Servicio para crear un nuevo usuario
+ */
 app.post('/api/v1/security/usuario', [verificarToken], function (req, res) {
     let body = req.body;
     let usuario = new Usuario({
@@ -32,6 +35,9 @@ app.post('/api/v1/security/usuario', [verificarToken], function (req, res) {
     });
 });
 
+/** 
+ *  Servicio de pagineo para traer todos los usuarios del sistema
+ */
 app.post('/api/v1/security/usuario/all', [verificarToken], function (req, res) {
     let body = req.body;
     let desde = body.start;
@@ -77,42 +83,30 @@ app.post('/api/v1/security/usuario/all', [verificarToken], function (req, res) {
     });
 });
 
+/** 
+ *  Servicio para actualizar un usuario
+ */
 app.put('/api/v1/security/usuario/:id', [verificarToken], function (req, res) {
     let id = req.params.id;
     let body = req.body;
-
-    Usuario.update(
-        { "_id": id},
-        { $push: { roles: { $each: body.push } } },
-        function (err, raw) 
-        {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            Usuario.update(
-                { "_id": id},
-                { $pullAll: { roles: { $each:  body.pull } } },     
-                function (err, raw) 
-                {
-                    if (err) {
-                        return res.status(400).json({
-                            ok: false,
-                            err
-                        });
-                    }
-                    res.json({
-                        ok: true,
-                        message: "Roles actualizado"
-                    });
-                }
-            );
-        }
-    );
+    Usuario.findByIdAndUpdate(id, body,{new: true, runValidators: true}, (err, usuario) =>{
+      if (err){
+          return res.status(400).json({
+              ok: false,
+              err
+          });
+      }
+      res.json({
+          ok: true,
+          usuario
+      });
+    });
 });
 
+
+/**
+ * Servicio para eliminar un usuario
+ */
 app.delete('/api/v1/security/usuario/:id', [verificarToken], (req, res) => {
     let id =  req.params.id;
     let body = {estado:false};
@@ -136,6 +130,10 @@ app.delete('/api/v1/security/usuario/:id', [verificarToken], (req, res) => {
     });
 });
 
+
+/**
+ * Servicio de cambio de contraseña por usuario
+ */
 app.post('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
     let id =  req.params.id;
     let body = req.body;
@@ -161,7 +159,10 @@ app.post('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
 });
 
 
-app.delete('/api/v1/security/resetpassword', [verificarToken], (req, res) => {
+/**
+ * Servicio de recuperar la contraseña
+ */
+app.post('/api/v1/security/recoverpassword', [verificarToken], (req, res) => {
     let id =  req.params.id;
     let body = req.body;
 
@@ -202,6 +203,9 @@ app.delete('/api/v1/security/resetpassword', [verificarToken], (req, res) => {
       });
 });
 
+/**
+ * Servicio para verificar el acceso a las pantallas
+ */
 app.get('/api/v1/security/usuario/viewmatch/:view', verificarToken, (req, res) => {
     let usuario = req.usuario;
     let view =  req.params.view;
@@ -238,6 +242,31 @@ app.get('/api/v1/security/usuario/viewmatch/:view', verificarToken, (req, res) =
                 err
             });
         })
+});
+
+app.get('/api/v1/security/usuario/:id', verificarToken, (req, res) => {
+    let id =  req.params.id;
+    Usuario
+        .findById(id)
+        .populate("roles")
+        .exec((err, data) =>{
+            if (err){
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            if (data ===null){
+                return res.status(400).json({
+                    ok: false,
+                    err:  {message:"usuario no encontrado"}
+                });
+            } 
+             res.json({
+                ok: true,
+                usuario: data
+            });
+        });
 });
 
 module.exports = app;
