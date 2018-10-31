@@ -29,7 +29,6 @@ app.post('/api/v1/security/login', (req, res) => {
         }, process.env.SEED, {
             expiresIn: process.env.CADUCIDAD_TOKEN
         });
-
         res.json({
             ok: true,
             usuario: usuarioDB,

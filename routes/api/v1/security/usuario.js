@@ -41,9 +41,10 @@ app.post('/api/v1/security/usuario', [verificarToken], function (req, res) {
 app.post('/api/v1/security/usuario/all', [verificarToken], function (req, res) {
     let body = req.body;
     let desde = body.start;
-    let limite = body.length;
+    let limite = body.length;   
     
     let condicion = {estado:true};
+    console.log("Entro a buscar");
     
     Usuario.find(condicion, 'primerNombre segundoNombre primerApellido segundoApellido email')
     .sort('email')
@@ -244,6 +245,9 @@ app.get('/api/v1/security/usuario/viewmatch/:view', verificarToken, (req, res) =
         })
 });
 
+/**
+ * Servicio para obtener un usuario 
+ */
 app.get('/api/v1/security/usuario/:id', verificarToken, (req, res) => {
     let id =  req.params.id;
     Usuario
@@ -267,6 +271,7 @@ app.get('/api/v1/security/usuario/:id', verificarToken, (req, res) => {
                 usuario: data
             });
         });
+        
 });
 
 module.exports = app;

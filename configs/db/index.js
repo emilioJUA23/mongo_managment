@@ -4,6 +4,7 @@ const Arbol = require('../../schemas/helpers/arbol');
 const Rol = require('../../schemas/security/rol');
 const Usuario = require('../../schemas/security/usuario');
 const Utils = require('../../utils');
+const bcrypt = require('bcrypt');
 
 const configurarVistas = async() =>{
     try {
@@ -53,7 +54,7 @@ const configurarVistas = async() =>{
             ID: "USER-SIGN-UP",
             nombre: "Creacion de usuarios",
             descripcion: "Pantalla para crear un usuario",
-            path: "userindex"
+            path: "usersignup"
         };
         let userUpdate = {
             ID: "USER-UPDATE",
@@ -219,10 +220,10 @@ const configurarVistas = async() =>{
             primerNombre: "Administrador",
             primerApellido: "Administrador",
             email: process.env.SMTP_AUTH_USER,
-            password: Utils.hash("123456"),
+            password: bcrypt.hashSync(Utils.hash("123456"),10),
             roles: [PRRol._id]
         });
-        
+        // bcrypt.hashSync(body.password,10)
         console.log("Creando Usuario");
         let PUUsuario  = await usuario.save();   
     } catch (error) {

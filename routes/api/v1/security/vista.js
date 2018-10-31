@@ -4,7 +4,7 @@ const Vista = require('../../../../schemas/security/vista');
 const Arbol = require('../../../../schemas/helpers/arbol');
 const {verificarToken} = require('../../../../middleware/authentication');
 
-app.post('/api/v1/security/vista/tree', [verificarToken],function (req, res) {
+app.get('/api/v1/security/vista/tree', [verificarToken],function (req, res) {
     Arbol.findOne({nombre:"ARBOLDEVISTAS"})
     .populate({
         path: 'nodos',

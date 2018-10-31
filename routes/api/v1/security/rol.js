@@ -29,6 +29,23 @@ app.post('/api/v1/security/rol', function (req, res) {
     });
 });
 
+app.get('/api/v1/security/rol/all', [verificarToken], function (req, res) {
+    let condicion = {estado:true};
+    Rol.find(condicion, 'nombre _id')
+    .exec((err, data) => {
+         if (err){
+             return res.status(400).json({
+                 ok: false,
+                 err
+             });
+         }
+         res.json({
+            ok:true,
+            data
+        });
+    });
+});
+
 /**
  * Pagineo del rol
  */
@@ -38,7 +55,6 @@ app.post('/api/v1/security/rol/all', [verificarToken], function (req, res) {
     let limite = body.length;
     
     let condicion = {estado:true};
-    console.log({desde,limite, condicion});
     
     Rol.find(condicion, 'nombre descripcion')
     .sort('nombre')
