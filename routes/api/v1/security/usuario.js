@@ -146,6 +146,7 @@ app.post('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
               err
           });
       }
+      console.log(usuario);
       if (usuario === null){
           return res.status(400).json({
               ok: false,
@@ -163,11 +164,11 @@ app.post('/api/v1/security/resetpassword/:id', [verificarToken], (req, res) => {
 /**
  * Servicio de recuperar la contraseña
  */
-app.post('/api/v1/security/recoverpassword', [verificarToken], (req, res) => {
+app.post('/api/v1/security/recoverpassword', (req, res) => {
     let id =  req.params.id;
     let body = req.body;
 
-    Person.findOne({ 'email': body.email}, 'email', function (err, data) {
+    Usuario.findOne({ 'email': body.email}, 'email', function (err, data) {
         if (err){
             return res.status(400).json({
                 ok: false,
@@ -185,8 +186,7 @@ app.post('/api/v1/security/recoverpassword', [verificarToken], (req, res) => {
             length: 10,
             numbers: true
         });
-
-        Utils.sendEmail(data.email, "Recuperacion de contraseña", `Tu nueva contraseña es: ${password}`, `<h1>Recuperacion de contrasena</h1><p>Tu nueva contrasena es: <b>${password}</b>`);
+        const dpassword = password;
         password = Utils.hash(password);
         password = bcrypt.hashSync(password,10)
         Usuario.findByIdAndUpdate(data._id, {password},{new: true}, (err, usuario) =>{
@@ -196,10 +196,18 @@ app.post('/api/v1/security/recoverpassword', [verificarToken], (req, res) => {
                     err
                 });
             }
-            res.json({
-                ok: true,
-                message: "Contrasena actualizada"
-            });
+            try {
+                Utils.sendEmail(data.email, "Recuperacion de contraseña", `Tu nueva contraseña es: ${dpassword}`, `<h1>Recuperacion de contrasena</h1><p>Tu nueva contrasena es: <b>${dpassword}</b>`);
+                res.json({
+                    ok: true,
+                    message: "Contrasena actualizada"
+                });
+            } catch (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
         });
       });
 });

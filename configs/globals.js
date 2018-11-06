@@ -29,8 +29,8 @@ process.env.LIMITE = 5;
 /** 
  * Configuracion de SMTP
  */
-process.env.SMTP_HOST = '';
-process.env.SMTP_PORT = 587;
+process.env.SMTP_HOST = 'smtp.gmail.com';
+process.env.SMTP_PORT = 465;
 process.env.SMTP_SECURE = true;
-process.env.SMTP_AUTH_USER = "djob195@gmail.com";
+process.env.SMTP_AUTH_USER = "";
 process.env.SMTP_AUTH_PASS = "";
