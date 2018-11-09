@@ -3,15 +3,21 @@ const app = express();
 const Vista = require('../../../../schemas/security/vista');
 const Arbol = require('../../../../schemas/helpers/arbol');
 const {verificarToken} = require('../../../../middleware/authentication');
+require('./../../../../schemas/helpers/nodo');
 
 app.get('/api/v1/security/vista/tree', [verificarToken],function (req, res) {
     Arbol.findOne({nombre:"ARBOLDEVISTAS"})
     .populate({
-        path: 'nodos',
-        populate: { path: 'nodos' }
-      })
+        path: "nodos",
+        select: 'text value -_id',
+        populate: { path: 'children',
+            select: 'text value -_id',
+            populate: { path: 'children',
+                select: 'text value -_id', } }
+    })
     .exec((err, data) => {
       if(err) {
+        console.log(err);
         return res.status(400).json({
             ok: false,
             err

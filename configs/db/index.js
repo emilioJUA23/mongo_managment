@@ -1,3 +1,5 @@
+require('../../configs/globals');
+
 const Vista = require('../../schemas/security/vista');
 const Nodo =  require('../../schemas/helpers/nodo');
 const Arbol = require('../../schemas/helpers/arbol');
@@ -5,6 +7,19 @@ const Rol = require('../../schemas/security/rol');
 const Usuario = require('../../schemas/security/usuario');
 const Utils = require('../../utils');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+
+const removeVista = async() =>{
+    try {
+        await Vista.remove({});
+        await Nodo.remove({});
+        await Arbol.remove({});
+        await Rol.remove({});
+        await Usuario.remove({});
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const configurarVistas = async() =>{
     try {
@@ -106,34 +121,8 @@ const configurarVistas = async() =>{
         let PVrolIndex = await rolIndexVista.save();
         let PVrolUpdate = await rolUpdateVista.save();
         let PVvistaIndex = await vistaIndexVista.save();
-    
-        home = {
-            text: PVhome.nombre,
-            value: PVhome._id,
-            children: [PVwelcome._id, PVsurveyIndex._id, PVsurveyBuild._id, PVconfiguration._id]
-        }; 
-        welcome = {
-            text: PVwelcome.nombre,
-            value: PVwelcome._id
-        };
-        surveyIndex = {
-            text: PVsurveyIndex.nombre,
-            value: PVsurveyIndex._id
-        };
-        surveyBuild = {
-            text: PVsurveyBuild.nombre,
-            value: PVsurveyBuild._id,
-            children: [PVsurveyVersions._id]
-        };
-        surveyVersions = {
-            text: PVsurveyVersions.nombre,
-            value: PVsurveyVersions._id
-        };
-        configuration = {
-            text: PVconfiguration.nombre,
-            value: PVconfiguration._id,
-            children: [PVuserIndex._id, PVuserSignUp._id, PVuserUpdate._id, PVrolIndex._id, PVrolUpdate._id, PVvistaIndex._id]
-        };
+
+        console.log("Creando nodos");
         userIndex ={
             text: PVuserIndex.nombre,
             value: PVuserIndex._id
@@ -158,39 +147,69 @@ const configurarVistas = async() =>{
             text: PVvistaIndex.nombre,
             value: PVvistaIndex._id
         };
-    
-        let homeNodo = new Nodo(home);
-        let welcomeNodo = new Nodo(welcome);
-        let surveyIndexNodo = new Nodo(surveyIndex);
-        let surveyBuildNodo = new Nodo(surveyBuild);
-        let surveyVersionsNodo = new Nodo(surveyVersions);
-        let configurationNodo = new Nodo(configuration);
         let userIndexNodo = new Nodo(userIndex);
         let userSignUpNodo= new Nodo(userSignUp);
         let userUpdateNodo = new Nodo(userUpdate);
         let rolIndexNodo = new Nodo(rolIndex);
         let rolUpdateNodo = new Nodo(rolUpdate);
         let vistaIndexNodo = new Nodo(vistaIndex);
-    
-        console.log("Creando nodos");
-        let PNhome = await homeNodo.save();
-        let PNwelcome = await welcomeNodo.save();
-        let PNsurveyIndex = await surveyIndexNodo.save();
-        let PNsurveyBuild = await surveyBuildNodo.save();
-        let PNsurveyVersions = await surveyVersionsNodo.save();
-        let PNconfiguration = await configurationNodo.save();
         let PNuserIndex = await userIndexNodo.save();
         let PNuserSignUp = await userSignUpNodo.save();
         let PNuserUpdate = await userUpdateNodo.save();
         let PNrolIndex = await rolIndexNodo.save();
         let PNrolUpdate = await rolUpdateNodo.save();
         let PNvistaIndex = await vistaIndexNodo.save();
-    
-        let arbol = new Arbol({
+
+        configuration = {
+            text: PVconfiguration.nombre,
+            value: PVconfiguration._id,
+            children: [PNuserIndex._id, PNuserSignUp._id, PNuserUpdate._id, PNrolIndex._id, PNrolUpdate._id, PNvistaIndex._id]
+        };
+        let configurationNodo = new Nodo(configuration);
+        let PNconfiguration = await configurationNodo.save();
+
+        surveyVersions = {
+            text: PVsurveyVersions.nombre,
+            value: PVsurveyVersions._id
+        };
+        let surveyVersionsNodo = new Nodo(surveyVersions);
+        let PNsurveyVersions = await surveyVersionsNodo.save();
+
+        surveyBuild = {
+            text: PVsurveyBuild.nombre,
+            value: PVsurveyBuild._id,
+            children: [PNsurveyVersions._id]
+        };
+        let surveyBuildNodo = new Nodo(surveyBuild);
+        let PNsurveyBuild = await surveyBuildNodo.save();
+
+        welcome = {
+            text: PVwelcome.nombre,
+            value: PVwelcome._id
+        };
+        surveyIndex = {
+            text: PVsurveyIndex.nombre,
+            value: PVsurveyIndex._id
+        };
+        let welcomeNodo = new Nodo(welcome);
+        let surveyIndexNodo = new Nodo(surveyIndex);
+        let PNwelcome = await welcomeNodo.save();
+        let PNsurveyIndex = await surveyIndexNodo.save();
+       
+        home = {
+            text: PVhome.nombre,
+            value: PVhome._id,
+            children: [PNwelcome._id, PNsurveyIndex._id, PNsurveyBuild._id, PNconfiguration._id]
+        }; 
+        let homeNodo = new Nodo(home);
+        let PNhome = await homeNodo.save();
+
+        let _arbol ={
             nombre: "ARBOLDEVISTAS",
             descripcion: "Arbol de flujo de navegacion en vistas",
-            children: [PNhome._id]
-        });
+            nodos: [PNhome._id]
+        };
+        let arbol = new Arbol(_arbol);
     
         console.log("Creando Arbol");
         let PArbol = await arbol.save();
@@ -223,7 +242,6 @@ const configurarVistas = async() =>{
             password: bcrypt.hashSync(Utils.hash("123456"),10),
             roles: [PRRol._id]
         });
-        // bcrypt.hashSync(body.password,10)
         console.log("Creando Usuario");
         let PUUsuario  = await usuario.save();   
     } catch (error) {
@@ -231,4 +249,15 @@ const configurarVistas = async() =>{
     }
 }
 
-configurarVistas();
+const configurarTodo = async() =>{
+    await removeVista();
+    await configurarVistas();
+    console.log("Configuracion terminada");
+    mongoose.connection.close(function () {
+        console.log('Mongoose connection disconnected');
+      });
+}
+mongoose.connect(process.env.URLDB , (err,res) => {
+    if (err) throw err;
+    configurarTodo();
+});

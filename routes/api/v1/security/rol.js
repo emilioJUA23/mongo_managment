@@ -6,13 +6,14 @@ const {verificarToken} = require('../../../../middleware/authentication');
 /**
  * Creacion de un rol
  */
-app.post('/api/v1/security/rol', function (req, res) {
+app.post('/api/v1/security/rol', [verificarToken],function (req, res) {
     let body = req.body;
+    let user = req.usuario;
     let rol = new Rol({
         nombre: body.nombre,
         descripcion: body.descripcion,
-        fechaDeIngreso: body.fechaDeIngreso,
-        usuarioDeIngreso: body.usuarioDeIngreso,
+        fechaDeIngreso: Date.now(),
+        usuarioDeIngreso: user._id
     });
 
     rol.save((err, rolDB) => {

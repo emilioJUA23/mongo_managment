@@ -12,7 +12,11 @@ let nodoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Nodo',
         required: false
-    }]
+    }],
+    value: {
+        type: String,
+        required: [true, 'El nombre del valor es necesario']
+    },
 });
 
 nodoSchema.plugin( uniqueValidator, { message:  '{PATH} debe ser unico'} );
