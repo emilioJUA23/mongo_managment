@@ -90,8 +90,15 @@ app.post('/api/v1/security/usuario/all', [verificarToken], function (req, res) {
 app.put('/api/v1/security/usuario/:id', [verificarToken], function (req, res) {
     let id = req.params.id;
     let body = req.body;
+
+    delete body._id;
+    delete body.email;
+    delete body.password;
+    console.log(body);
+    
     Usuario.findByIdAndUpdate(id, body,{new: true, runValidators: true}, (err, usuario) =>{
       if (err){
+          console.log(err);
           return res.status(400).json({
               ok: false,
               err

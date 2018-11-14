@@ -101,9 +101,12 @@ app.post('/api/v1/security/rol/all', [verificarToken], function (req, res) {
 app.put('/api/v1/security/rol/:id', [verificarToken], function (req, res) {
     let id = req.params.id;
     let body = req.body;
+    delete body.usuarioDeIngreso;
+    delete body._id;
 
     Rol.findByIdAndUpdate(id, body,{new: true, runValidators: true}, (err, usuario) =>{
       if (err){
+          console.log(err);
           return res.status(400).json({
               ok: false,
               err
