@@ -225,14 +225,16 @@ app.post('/api/v1/security/recoverpassword', (req, res) => {
 app.get('/api/v1/security/usuario/viewmatch/:view', verificarToken, (req, res) => {
     let usuario = req.usuario;
     let view =  req.params.view;
-
+    console.log(view);
     Usuario.
-        findOne({ _id : usuario._id }).
+        findOne({ _id : usuario._id, estado:true }).
         populate({
             path: 'roles',
+            match: { estado: true},
             populate: { path: 'vistas' } })
         .exec((err, data) => {
             if (err){
+                console.log(err);
                 return res.status(400).json({
                     ok: false,
                     err
@@ -243,19 +245,20 @@ app.get('/api/v1/security/usuario/viewmatch/:view', verificarToken, (req, res) =
                     ok: false,
                     err:  {message:"usuario no encontrado"}
                 });
-            }    
-            data.roles.forEach((rol) =>{
+            }   
+            for (let index = 0; index <  data.roles.length; index++) {
+                const rol = data.roles[index];
                 if(rol.vistas.some(vista => vista.ID === view))
                 {
-                    res.json({
+                    console.log("autorizado");
+                    return res.json({
                         ok: true,
                         message: "Acceso autorizado"
                     });
-                }
-            });
+                } 
+            }
             return res.status(403).json({
-                ok: false,
-                err
+                ok: false
             });
         })
 });
