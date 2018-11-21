@@ -1,0 +1,39 @@
+version: "2"
+services:
+  rest:
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    container_name: "rest"
+    build: .
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=DEV
+      - URLDB=mongodb://mongodb:27017/iarna
+      - CADUCIDAD_TOKEN=90000
+      - SEED=est3-3s-s33d-p4r4-pr0duc10n
+      - DESDE=0
+      - LIMITE=5
+      - SMTP_HOST=
+      - SMTP_PORT=
+      - SMTP_SECURE=
+      - SMTP_AUTH_PASS=3000
+      - SMTP_AUTH_USER=djob195@gmail.com
+
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet

@@ -11,7 +11,7 @@ process.env.NODE_ENV = process.env.NODE_ENV  || 'dev';
 /**
  * Dirección a la base de datos
  */
-process.env.URLDB = (process.env.NODE_ENV === 'dev') ?  'mongodb://localhost:27017/iarna' : 'mongodb://localhost:27017/iarna';
+process.env.URLDB = process.env.URLDB || 'mongodb://mongodb:27017/iarna';
 
 
 /**
