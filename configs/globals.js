@@ -12,7 +12,7 @@ process.env.NODE_ENV = process.env.NODE_ENV  || 'dev';
  * Dirección a la base de datos
  */
 process.env.NAMEDB = process.env.NAMEDB  || 'iarna';
-process.env.URLDB = process.env.URLDB  || `mongodb://localhost:27017/${process.env.NAMEDB}`;
+process.env.URLDB = `${process.env.URLDB}${process.env.NAMEDB}` || `mongodb://localhost:27017/${process.env.NAMEDB}`;
 
 
 

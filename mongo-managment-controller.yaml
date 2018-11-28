@@ -24,30 +24,30 @@ spec:
             memory: 100Mi
         env:
         - name: PORT
-          value: ""
+          value: "8080"
         - name: NODE_ENV
-          value: ""
+          value: "PROD"
         - name: NAMEDB
-          value: ""
+          value: "iarna"
         - name: URLDB
-          value: "" 
+          value: "mongodb://admin:admin123456@ds119304.mlab.com:19304" 
         - name: CADUCIDAD_TOKEN
-          value: ""      
+          value: "2592000"      
         - name: SEED
-          value: ""       
+          value: "3sT3-3S-3L-S33d-D3-Pr0duCc10N-p4R4-t0K3n"       
         - name: DESDE
-          value: ""     
+          value: "0"     
         - name: LIMITE
-          value: ""      
+          value: "5"      
         - name: SMTP_HOST
-          value: ""   
+          value: "smtp.gmail.com"   
         - name: SMTP_PORT
-          value: ""   
+          value: "465"   
         - name: SMTP_SECURE
-          value: ""   
+          value: "true"   
         - name: SMTP_AUTH_USER
-          value: ""   
+          value: "djob195@gmail.com"   
         - name: SMTP_AUTH_PASS
-          value: ""                                                                                           
+          value: "22880207DiegoOrellana"                                                                                           
         ports:
         - containerPort: 8080
