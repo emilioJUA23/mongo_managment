@@ -18,7 +18,8 @@ app.post('/api/v1/security/usuario', [verificarToken], function (req, res) {
         primerApellido: body.primerApellido,
         segundoApellido: body.segundoApellido,
         email: body.email,
-        password: bcrypt.hashSync(body.password,10)
+        password: bcrypt.hashSync(body.password,10),
+        roles: body.roles
     });
 
     usuario.save((err, usuarioDB) => {

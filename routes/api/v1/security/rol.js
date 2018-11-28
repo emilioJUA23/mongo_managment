@@ -13,7 +13,8 @@ app.post('/api/v1/security/rol', [verificarToken],function (req, res) {
         nombre: body.nombre,
         descripcion: body.descripcion,
         fechaDeIngreso: Date.now(),
-        usuarioDeIngreso: user._id
+        usuarioDeIngreso: user._id,
+        vistas: body.vistas
     });
 
     rol.save((err, rolDB) => {
