@@ -2,23 +2,27 @@ const express = require('express');
 const app = express();
 const { verificarToken } = require('../../../../middleware/authentication');
 var MongoClient = require('mongodb').MongoClient;
+const fs = require('fs');
+const uuidv1 = require('uuid/v1');
 
 app.get("/api/v1/survey/results/:id",[verificarToken], (req, res) => {
     var id = req.params.id;
     GetResults(id).then(function (results) {
         console.log(results);
         var jsonexport = require('jsonexport');
+        var filename = `${uuidv1()}.csv`;
         jsonexport(results, function (err, csv) {
             if (err) return console.log(err);
-            fs = require('fs');
-            console.log(csv);
-            fs.writeFile('out.csv', csv, function (err) {
+            fs.writeFile(`${__dirname}\\${filename}`, csv,{flag: 'w'}, function (err) {
                 if (err)
                     return console.log(err);
-                res.download(__dirname + '\\out.csv', function (err) {
+                res.download(`${__dirname}\\${filename}`, function (err) {
                     if (err) {
                         throw err;
                     }
+                 fs.unlink(`${__dirname}\\${filename}`,(err)=>{
+                     if(err) console.log(err);
+                 })
                 });
             });
         });

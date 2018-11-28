@@ -290,6 +290,7 @@ const configurarTodo = async() =>{
         console.log('Mongoose connection disconnected');
       });
 }
+console.log(process.env.URLDB);
 mongoose.connect(process.env.URLDB , (err,res) => {
     if (err) throw err;
     configurarTodo();

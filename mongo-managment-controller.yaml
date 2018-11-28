@@ -24,27 +24,27 @@ spec:
             memory: 100Mi
         env:
         - name: PORT
-          value: ""
+          value: "8080"
         - name: NODE_ENV
-          value: ""
+          value: "PROD"
         - name: NAMEDB
-          value: ""
+          value: "iarna"
         - name: URLDB
           value: "" 
         - name: CADUCIDAD_TOKEN
-          value: ""      
+          value: "2592000"      
         - name: SEED
           value: ""       
         - name: DESDE
-          value: ""     
+          value: "0"     
         - name: LIMITE
-          value: ""      
+          value: "5"      
         - name: SMTP_HOST
-          value: ""   
+          value: "smtp.gmail.com"   
         - name: SMTP_PORT
-          value: ""   
+          value: "465"   
         - name: SMTP_SECURE
-          value: ""   
+          value: "true"   
         - name: SMTP_AUTH_USER
           value: ""   
         - name: SMTP_AUTH_PASS

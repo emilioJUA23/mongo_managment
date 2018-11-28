@@ -12,7 +12,8 @@ process.env.NODE_ENV = process.env.NODE_ENV  || 'dev';
  * Dirección a la base de datos
  */
 process.env.NAMEDB = process.env.NAMEDB  || 'iarna';
-process.env.URLDB = `${process.env.URLDB}${process.env.NAMEDB}` || `mongodb://localhost:27017/${process.env.NAMEDB}`;
+process.env.URLDB = process.env.URLDB || `mongodb://localhost:27017`;
+process.env.URLDB = `${process.env.URLDB}/${process.env.NAMEDB}` 
 
 
 
@@ -35,4 +36,4 @@ process.env.SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
 process.env.SMTP_PORT = process.env.SMTP_PORT || 465;
 process.env.SMTP_SECURE = process.env.SMTP_SECURE || true;
 process.env.SMTP_AUTH_USER = process.env.SMTP_AUTH_USER || "djob195@gmail.com";
-process.env.SMTP_AUTH_PASS = process.env.SMTP_AUTH_PASS || "22880207Elida";
+process.env.SMTP_AUTH_PASS = process.env.SMTP_AUTH_PASS || "";
