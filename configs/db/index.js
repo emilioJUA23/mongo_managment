@@ -15,7 +15,6 @@ const removeVista = async() =>{
         await Nodo.remove({});
         await Arbol.remove({});
         await Rol.remove({});
-        await Usuario.remove({});
     } catch (error) {
         console.log(error);
     }
@@ -272,11 +271,15 @@ const configurarVistas = async() =>{
             primerNombre: "Administrador",
             primerApellido: "Administrador",
             email: process.env.SMTP_AUTH_USER,
-            password: bcrypt.hashSync(Utils.hash("123456"),10),
+            password: bcrypt.hashSync(Utils.hash(process.env.ADMIN_PASSWORD ),10),
             roles: [PRRol._id]
         });
-        console.log("Creando Usuario");
-        let PUUsuario  = await usuario.save();   
+        Usuario.findOneAndUpdate({email: process.env.SMTP_AUTH_USER},
+            usuario,{
+                upsert:true,
+                runValidators: false
+            }, (err, doc) =>{});
+        console.log("Creando Usuario"); 
     } catch (error) {
         console.log(error);
     }
