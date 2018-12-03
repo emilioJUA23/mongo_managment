@@ -274,15 +274,12 @@ const configurarVistas = async() =>{
             password: bcrypt.hashSync(Utils.hash(process.env.ADMIN_PASSWORD ),10),
             roles: [PRRol._id]
         });
-        Usuario.findOneAndUpdate({email: process.env.SMTP_AUTH_USER},
+        await Usuario.findOneAndUpdate({email: process.env.SMTP_AUTH_USER},
             usuario,{
                 upsert:true,
                 runValidators: false
-            }, (err, doc) =>{
-                if (err){console.log(err);}
-                else {console.log("usuario creado");}
             });
-        console.log("Creando Usuario"); 
+        console.log("usuario creado"); 
     } catch (error) {
         console.log(error);
     }
