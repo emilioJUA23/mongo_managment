@@ -278,7 +278,10 @@ const configurarVistas = async() =>{
             usuario,{
                 upsert:true,
                 runValidators: false
-            }, (err, doc) =>{});
+            }, (err, doc) =>{
+                if (err){console.log(err);}
+                else {console.log("usuario creado");}
+            });
         console.log("Creando Usuario"); 
     } catch (error) {
         console.log(error);
