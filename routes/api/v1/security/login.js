@@ -23,13 +23,11 @@ app.post('/api/v1/security/login', (req, res) => {
                 err
             });
         }
-        console.log("contrasena " + body.password);
-        console.log("db " + usuarioDB.password);
         if (!usuarioDB || !bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'Usuario o contrasena incorrecta'
+                    message: `Usuario o contrasena incorrecta ${body.password} ${usuarioDB.password} `
                 }
             });
         }
